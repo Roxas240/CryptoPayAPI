@@ -1,0 +1,6 @@
+node.rpc.protocol = http
+node.rpc.host = 127.0.0.1
+node.rpc.port = 32339
+node.rpc.user =
+node.rpc.password =
+node.http.auth_scheme = Basic
