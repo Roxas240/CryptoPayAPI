@@ -6,8 +6,8 @@ import com.xemplar.libs.crypto.server.net.CryptoServer;
 public class Main {
     public static void main(String[] args){
         if(args == null) error();
-        if(args.length != 4) error();
-        CryptoServer server = new CryptoServer(args[3], args[2], args[0], args[1].toCharArray(), "node_config.prop");
+        if(args.length != 5) error();
+        CryptoServer server = new CryptoServer(args[3], args[2], args[0], args[1].toCharArray(), args[4]);
         Thread t = new Thread(server);
         t.start();
     }
