@@ -79,6 +79,10 @@ public class CryptoServer implements Runnable{
                         for(int i = 0; i < payments.size(); i++){
                             boolean seen = payments.get(i).hasRequest(r);
                             found |= seen;
+
+                            if(seen && r.filled == -1){
+                                payments.get(i).cancel();
+                            }
                         }
                         if(!found) {
                             CryptoServer.this.requests.add(r);
