@@ -39,7 +39,7 @@ public class CryptoTest extends Application implements MoneyListener, NetworkLis
     private Label totalMoney;
     private long money = 5;
 
-    public static BigDecimal B1_COST = new BigDecimal("0.01"), B2_COST = new BigDecimal("0.05");
+    public static BigDecimal B1_COST = new BigDecimal("0.05"), B2_COST = new BigDecimal("0.01");
 
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
@@ -61,7 +61,7 @@ public class CryptoTest extends Application implements MoneyListener, NetworkLis
             }
         });
 
-        cli = new CryptoClient(CRYPTO_ADDRESS, "http://localhost/index.php", "pay_wallet", "pX6RNOOWkFfy5BX3".toCharArray());
+        cli = new CryptoClient(CRYPTO_ADDRESS, "http://localhost/index.php", "api", "password".toCharArray());
 
         Button opt1 = (Button) s.lookup("#buy_opt1");
         Button opt2 = (Button) s.lookup("#buy_opt2");
