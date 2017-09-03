@@ -1,15 +1,15 @@
 package com.xemplar.libs.crypto.server.link;
 
-import com.xemplar.libs.crypto.server.Commands;
 import com.xemplar.libs.crypto.server.CommunicationException;
-import com.xemplar.libs.crypto.server.CryptocoinException;
-import com.xemplar.libs.crypto.common.DataFormats;
-import com.xemplar.libs.crypto.common.Defaults;
 import com.xemplar.libs.crypto.server.domain.*;
 import com.xemplar.libs.crypto.server.jsonrpc.client.JsonRpcClient;
 import com.xemplar.libs.crypto.server.jsonrpc.client.JsonRpcClientImpl;
 import com.xemplar.libs.crypto.server.util.CollectionUtils;
 import com.xemplar.libs.crypto.server.util.NumberUtils;
+import com.xemplar.libs.crypto.server.Commands;
+import com.xemplar.libs.crypto.server.CryptocoinException;
+import com.xemplar.libs.crypto.common.DataFormats;
+import com.xemplar.libs.crypto.common.Defaults;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,7 +146,7 @@ public class CryptoLinkRPCImpl implements CryptoLinkRPC {
 	}
 
 	@Override
-	public RedeemScript decodeScript(String hexRedeemScript) throws CryptocoinException, 
+	public RedeemScript decodeScript(String hexRedeemScript) throws CryptocoinException,
 			CommunicationException {
 		String redeemScriptJson = rpcClient.execute(Commands.DECODE_SCRIPT.getName(), 
 				hexRedeemScript);

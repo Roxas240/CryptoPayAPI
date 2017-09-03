@@ -1,9 +1,9 @@
 package com.xemplar.libs.crypto.server.http.client;
 
-import com.xemplar.libs.crypto.server.NodeProps;
 import com.xemplar.libs.crypto.common.Constants;
 import com.xemplar.libs.crypto.common.DataFormats;
 import com.xemplar.libs.crypto.common.Errors;
+import com.xemplar.libs.crypto.server.NodeProps;
 import com.xemplar.libs.crypto.server.http.HttpConstants;
 import com.xemplar.libs.crypto.server.http.HttpLayerException;
 import org.apache.commons.codec.binary.Base64;

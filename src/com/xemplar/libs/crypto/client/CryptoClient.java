@@ -124,12 +124,7 @@ public final class CryptoClient {
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("id", handler.getID() + ""));
 
-        int res = rest.doPost("cancel", params, new NetworkListener.ClientPaymentListener() {
-            public void onPayError(String key, Exception e) {}
-            public void onPayReceived(String key, String txid) { }
-            public void onPinReceived(String key, String pin) { }
-            public void onPayCanceled(String key) {}
-        });
+        int res = rest.doPost("cancel", params, new NetworkListener.ClientPaymentAdapter());
 
         handler.cancel();
 

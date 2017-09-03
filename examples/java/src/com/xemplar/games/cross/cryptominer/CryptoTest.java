@@ -1,7 +1,8 @@
-package com.xemplar.libs.crypto.example;
+package com.xemplar.games.cross.cryptominer;
 
 import com.xemplar.libs.crypto.client.CryptoClient;
 import com.xemplar.libs.crypto.common.NetworkListener;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -39,7 +40,7 @@ public class CryptoTest extends Application implements MoneyListener, NetworkLis
     private Label totalMoney;
     private long money = 5;
 
-    public static BigDecimal B1_COST = new BigDecimal("0.01"), B2_COST = new BigDecimal("0.05");
+    public static BigDecimal B1_COST = new BigDecimal("0.05"), B2_COST = new BigDecimal("0.01");
 
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
@@ -52,13 +53,11 @@ public class CryptoTest extends Application implements MoneyListener, NetworkLis
         primaryStage.setScene(s);
         primaryStage.show();
 
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent event) {
-                for(Resource r : res){
-                    r.miners = 0;
-                }
-                System.exit(0);
+        primaryStage.setOnCloseRequest((WindowEvent event) -> {
+            for (Resource r : res) {
+                r.miners = 0;
             }
+            System.exit(0);
         });
 
         cli = new CryptoClient(CRYPTO_ADDRESS, "http://localhost/index.php", "pay_wallet", "pX6RNOOWkFfy5BX3".toCharArray());
@@ -116,6 +115,11 @@ public class CryptoTest extends Application implements MoneyListener, NetworkLis
 
     public void onPayCanceled(String key) {
 
+    }
+
+    public void onConfirmUpdate(String key, int confirms) {
+        if(popup == null) return;
+        Platform.runLater(() -> popup.setConfirms(confirms));
     }
 
     //Game Methods

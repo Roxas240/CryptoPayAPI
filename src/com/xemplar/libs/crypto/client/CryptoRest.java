@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Rohan on 8/22/2017.
  */
-public class CryptoRest extends HttpRest{
+public class CryptoRest extends HttpRest {
     public CryptoRest(String pubKey, char[] privKey, String url){
         super(pubKey, privKey, url);
     }
@@ -67,12 +67,15 @@ public class CryptoRest extends HttpRest{
                     return 0;
                 } else if(method.equals("chkpay")){
                     String filled = "0";
+                    int confirms = 0;
                     try{
                         filled = resp.toString().trim().split(":")[1];
+                        confirms = Integer.parseInt(resp.toString().trim().split(":")[3]);
                     } catch(Exception e){
 
                     }
                     ((NetworkListener.ClientPaymentListener)listener).onPayReceived(null, filled);
+                    ((NetworkListener.ClientPaymentListener)listener).onConfirmUpdate(null, confirms);
 
                     return 0;
                 } else if(method.equals("cancel")){

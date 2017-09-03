@@ -1,4 +1,4 @@
-package com.xemplar.libs.crypto.example;
+package com.xemplar.games.cross.cryptominer;
 
 /**
  * Created by Rohan on 8/21/2017.

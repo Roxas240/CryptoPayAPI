@@ -4,14 +4,15 @@ package com.xemplar.libs.crypto.server.net.domain;
  * Created by Rohan on 8/21/2017.
  */
 public class Request {
-    public String amount, code;
+    public String amount, code, notes;
     public int id, filled;
 
     public Request(){}
-    public Request(int id, int filled, String amount){
+    public Request(int id, int filled, String amount, String notes){
         this.id = id;
         this.filled = filled;
         this.amount = amount;
+        this.notes = notes;
     }
 
     public int getId(){

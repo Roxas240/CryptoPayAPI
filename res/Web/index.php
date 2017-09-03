@@ -8,14 +8,15 @@ $database = "crypto_payments";
 
 
 //get parameter from INPUT
-$user   =      trim(filter_input(INPUT_POST, "user",    FILTER_SANITIZE_STRING)) ?? NULL;
-$pass   =      trim(filter_input(INPUT_POST, "pass",    FILTER_SANITIZE_STRING)) ?? NULL;
-$method =      trim(filter_input(INPUT_POST, "method",  FILTER_SANITIZE_STRING)) ?? NULL;
-$id     = (int)trim(filter_input(INPUT_POST, "id",      FILTER_SANITIZE_NUMBER_INT)) ?? 0;
-$pin    =      trim(filter_input(INPUT_POST, "pin",     FILTER_SANITIZE_STRING)) ?? NULL;
-$txid   =      trim(filter_input(INPUT_POST, "txid",    FILTER_SANITIZE_STRING)) ?? NULL;
-$amount =      trim(filter_input(INPUT_POST, "amount",  FILTER_SANITIZE_STRING)) ?? NULL;
-$notes  =      trim(filter_input(INPUT_POST, "notes",   FILTER_SANITIZE_STRING)) ?? NULL;
+$user    =      trim(filter_input(INPUT_POST, "user",     FILTER_SANITIZE_STRING)) ?? NULL;
+$pass    =      trim(filter_input(INPUT_POST, "pass",     FILTER_SANITIZE_STRING)) ?? NULL;
+$method  =      trim(filter_input(INPUT_POST, "method",   FILTER_SANITIZE_STRING)) ?? NULL;
+$id      = (int)trim(filter_input(INPUT_POST, "id",       FILTER_SANITIZE_NUMBER_INT)) ?? 0;
+$confirm = (int)trim(filter_input(INPUT_POST, "confirms", FILTER_SANITIZE_NUMBER_INT)) ?? 0;
+$pin     =      trim(filter_input(INPUT_POST, "pin",      FILTER_SANITIZE_STRING)) ?? NULL;
+$txid    =      trim(filter_input(INPUT_POST, "txid",     FILTER_SANITIZE_STRING)) ?? NULL;
+$amount  =      trim(filter_input(INPUT_POST, "amount",   FILTER_SANITIZE_STRING)) ?? NULL;
+$notes   =      trim(filter_input(INPUT_POST, "notes",    FILTER_SANITIZE_STRING)) ?? NULL;
 
 //function create conection DB
 function loginMysql($userName = \NULL, $passWord = \NULL) {
@@ -39,7 +40,7 @@ $linkDB = loginMysql($user,$pass);
 // switching by method var
 switch ($method) {
     case "requests":
-            $query = "SELECT id, amount, filled FROM $table WHERE (code='-1' OR filled='-1')";
+            $query = "SELECT id, amount, filled, notes FROM $table WHERE (code='-1' OR filled='-1')";
             $result = mysqli_query($linkDB, $query) or die("Error: ".mysqli_error($linkDB));
             for ($set = Array(); $row = $result->fetch_assoc(); $set[] = $row);
             echo json_encode($set);
@@ -51,6 +52,11 @@ switch ($method) {
         break;
     case "setpaid":
             $query = "UPDATE $table SET txid='$txid', filled='1' WHERE id='$id'";
+            $result = mysqli_query($linkDB, $query) or die("Error: ".mysqli_error($linkDB));
+            echo "Done!";
+        break;
+	case "confirms":
+            $query = "UPDATE $table SET confirms='$confirm' WHERE id='$id'";
             $result = mysqli_query($linkDB, $query) or die("Error: ".mysqli_error($linkDB));
             echo "Done!";
         break;
@@ -74,10 +80,10 @@ switch ($method) {
             echo "Code:".$array['code'].":$id";
         break;
 	case "chkpay":
-            $query = "SELECT filled FROM $table WHERE id='$id'";
+            $query = "SELECT filled, confirms FROM $table WHERE id='$id'";
             $result = mysqli_query($linkDB, $query) or die("Error: ".mysqli_error($linkDB));
 			$array = $result->fetch_assoc();
-            echo "Filled:".$array['filled'];
+            echo "Filled:".$array['filled'].":Confirms:".$array['confirms'];
         break;
 	case "cancel":
             $query = "UPDATE $table SET filled='-1' WHERE id='$id'";

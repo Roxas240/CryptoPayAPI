@@ -1,5 +1,7 @@
 package com.xemplar.libs.crypto.server;
 
+import java.util.Properties;
+
 /**
  * Created by Rohan on 8/15/2017.
  */
@@ -12,7 +14,12 @@ public enum NodeProps {
     HTTP_AUTH_SCHEME("node.http.auth_scheme", "Basic"),
     ALERT_PORT("node.notification.alert.port", "5158"),
     BLOCK_PORT("node.notification.block.port", "5159"),
-    WALLET_PORT("node.notification.wallet.port", "5160");
+    WALLET_PORT("node.notification.wallet.port", "5160"),
+
+    DB_USER("db.web.user", "db_user"),
+    DB_PASS("db.web.pass", "SecurePass123"),
+    DB_URL("db.web.url", "http://localhost/index.php"),
+    WALLET_ADDRESS("node.account.address", "D9btaj1e87UyDsyjqe4bs6Jr5EMWqrFHhb");
 
     NodeProps(String key, String val){
         this.defaultValue = val;
@@ -27,4 +34,8 @@ public enum NodeProps {
     }
     private final String key;
     private final String defaultValue;
+
+    public String getValue(Properties props){
+        return props.getProperty(this.getKey(), this.getDefaultValue());
+    }
 }

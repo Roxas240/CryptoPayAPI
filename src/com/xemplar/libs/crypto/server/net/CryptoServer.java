@@ -1,24 +1,57 @@
 package com.xemplar.libs.crypto.server.net;
 import com.xemplar.libs.crypto.common.NetworkListener;
+import com.xemplar.libs.crypto.server.NodeProps;
+import com.xemplar.libs.crypto.server.ServerListener;
 import com.xemplar.libs.crypto.server.net.domain.Request;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by Rohan on 8/20/2017.
  */
 public class CryptoServer implements Runnable{
     public static int MIN_CONFIRMS = 3;
+    public ServerListener listener;
     public boolean running = false;
     CryptoLink link;
 
     public CryptoServer(String cryptoAddress, String webAddress, String user, char[] pass, String config){
         this.link = new CryptoLink(cryptoAddress, webAddress, user, pass);
         try {
-            link.initialize(config);
+            Properties nodeConfig = new Properties();
+            InputStream is = new BufferedInputStream(new FileInputStream("./" + config));
+            nodeConfig.load(is);
+            is.close();
+            link.initialize(nodeConfig);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        running = true;
+    }
+
+    public CryptoServer(String config, ServerListener listener){
+        this.listener = listener;
+        try {
+            Properties nodeConfig = new Properties();
+            InputStream is = new BufferedInputStream(new FileInputStream("./" + config));
+            nodeConfig.load(is);
+            is.close();
+
+            String address = NodeProps.WALLET_ADDRESS.getValue(nodeConfig);
+            String url = NodeProps.DB_URL.getValue(nodeConfig);
+            String user = NodeProps.DB_USER.getValue(nodeConfig);
+            char[] pass = NodeProps.DB_PASS.getValue(nodeConfig).toCharArray();
+
+            this.link = new CryptoLink(address, url, user, pass);
+            link.initialize(nodeConfig);
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -48,6 +81,7 @@ public class CryptoServer implements Runnable{
                     params.add(new BasicNameValuePair("txID", txID));
 
                     CryptoServer.this.link.doPost("setpaid", params, null);
+                    CryptoServer.this.listener.onRequestFilled(handler.getID());
                 }
 
                 public void paymentCanceled(PaymentHandler handler) {
@@ -56,6 +90,7 @@ public class CryptoServer implements Runnable{
                     CryptoServer.this.link.doPost("remove", params, null);
 
                     payments.remove(handler);
+                    CryptoServer.this.listener.onRequestCanceled(handler.getID());
                 }
             }));
         }
@@ -79,9 +114,15 @@ public class CryptoServer implements Runnable{
                         for(int i = 0; i < payments.size(); i++){
                             boolean seen = payments.get(i).hasRequest(r);
                             found |= seen;
+
+                            if(seen && r.filled == -1){
+                                payments.get(i).cancel();
+                            }
                         }
                         if(!found) {
                             CryptoServer.this.requests.add(r);
+                            CryptoServer.this.listener.onRequestReceived(r.id, r.notes, new BigDecimal(r.amount));
+                            CryptoServer.this.listener.onRequestUpdate(r.id, "Request");
                             System.out.println("  Request Found: " + r.getId());
                         }
                     }

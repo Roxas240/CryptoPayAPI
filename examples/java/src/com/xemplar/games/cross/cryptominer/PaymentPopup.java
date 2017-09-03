@@ -1,9 +1,8 @@
-package com.xemplar.libs.crypto.example;
+package com.xemplar.games.cross.cryptominer;
 
 import com.xemplar.libs.crypto.client.CryptoClient;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
@@ -28,11 +28,16 @@ import java.util.ArrayList;
  * Created by Rohan on 8/22/2017.
  */
 public class PaymentPopup extends Application{
+    public static final int MIN_CONFIRMS = 3;
+
     public final String item, pass, ticker, address;
     public final BigDecimal amount;
     public final CryptoClient cli;
 
     private Stage primaryStage;
+    private ProgressBar bar;
+
+    String name = "Fors Dīvitiārum";
 
     public PaymentPopup(CryptoClient cli, String item, String pass, String ticker, String address, BigDecimal amount){
         this.cli = cli;
@@ -66,7 +71,7 @@ public class PaymentPopup extends Application{
             }
         });
 
-        ProgressBar bar = (ProgressBar) s.lookup("#pay_progress");
+        bar = (ProgressBar) s.lookup("#pay_progress");
         ImageView view = (ImageView) s.lookup("#qr_code");
         Label addr = (Label) s.lookup("#address_label");
         Label item = (Label) s.lookup("#pay_item");
@@ -100,6 +105,16 @@ public class PaymentPopup extends Application{
         addr.setText("Pay to: " + address);
 
         this.primaryStage = primaryStage;
+    }
+
+    public void setConfirms(int confirms){
+        primaryStage.setTitle("Waiting for Payment");
+        if(confirms > 0) {
+            primaryStage.setTitle("Confirming: " + confirms);
+            bar.setProgress((double) confirms / (double) MIN_CONFIRMS);
+        } else {
+            bar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+        }
     }
 
     public static ArrayList<Node> getAllNodes(Parent root) {

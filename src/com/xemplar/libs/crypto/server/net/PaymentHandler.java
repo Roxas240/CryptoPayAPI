@@ -17,10 +17,10 @@ import static com.xemplar.libs.crypto.server.net.CryptoServer.MIN_CONFIRMS;
  * Created by Rohan on 8/20/2017.
  */
 public class PaymentHandler implements Runnable{
+    private double confirms, prevConfirmes;
+    private boolean started, canceled;
     private CryptoServer main;
     private Request request;
-    private boolean started;
-    private boolean canceled;
     private int id;
 
     public PaymentHandler(CryptoServer rest, Request req, NetworkListener.ServerPaymentListener listener){
@@ -50,17 +50,20 @@ public class PaymentHandler implements Runnable{
         pairs.add(new BasicNameValuePair("id", "" + id));
         pairs.add(new BasicNameValuePair("pin", pin));
         main.link.doPost("setpin", pairs, null);
+        main.listener.onRequestGenerated(request.id, pin);
 
         List<String> hasTXNote = new ArrayList<>();
         int lastBlock = startBlock - 1, currentBlock = startBlock;
         BigDecimal bal = new BigDecimal("0.0");
         boolean paid = false;
 
+        List<String> allTX = new ArrayList<>();
         while (!paid && !canceled) {
             if (currentBlock != lastBlock) {
                 List<String> received = main.link.getPayTX(pin, lastBlock, currentBlock);
                 if (received != null) {
                     hasTXNote.addAll(received);
+                    allTX.addAll(received);
                 }
                 if (bal.compareTo(price) >= 0) {
                     paid = true;
@@ -72,6 +75,10 @@ public class PaymentHandler implements Runnable{
             List<String> added = new ArrayList<>();
             for (String id : hasTXNote) {
                 Transaction b = main.link.getTransaction(id);
+                int confirm = b.getConfirmations();
+                if(confirm > 0){
+
+                }
                 if (b.getConfirmations() < MIN_CONFIRMS) continue;
 
                 bal = bal.add(b.getAmount());
@@ -80,10 +87,31 @@ public class PaymentHandler implements Runnable{
             hasTXNote.removeAll(added);
             added.clear();
 
+            confirms = 0;
+            for (String id : allTX) {
+                Transaction b = main.link.getTransaction(id);
+                int confirm = b.getConfirmations();
+                if(confirm > 0) {
+                    confirms += confirm;
+                }
+            }
+            confirms /= (double)allTX.size();
+            if(prevConfirmes != confirms){
+                List<NameValuePair> dat = new ArrayList<>();
+                dat.add(new BasicNameValuePair("id", id + ""));
+                dat.add(new BasicNameValuePair("confirms", (int)confirms + ""));
+                main.link.doPost("confirms", dat, null);
+                main.listener.onRequestUpdate(request.id, "Confirm: " + (int)confirms);
+                dat.clear();
+            }
+            prevConfirmes = confirms;
+
             sleep(1000);
         }
+        allTX.clear();
 
         if (paid) {
+            main.listener.onRequestUpdate(request.id, "Filled");
             payListener.paymentReceived(this, "");
             main.codes.remove(pin);
             hasTXNote.clear();

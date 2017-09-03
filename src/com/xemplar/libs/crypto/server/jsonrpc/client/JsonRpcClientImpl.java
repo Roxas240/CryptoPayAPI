@@ -1,16 +1,16 @@
 package com.xemplar.libs.crypto.server.jsonrpc.client;
 
 import com.xemplar.libs.crypto.server.CommunicationException;
+import com.xemplar.libs.crypto.server.jsonrpc.JsonMapper;
+import com.xemplar.libs.crypto.server.jsonrpc.JsonPrimitiveParser;
+import com.xemplar.libs.crypto.server.jsonrpc.domain.JsonRpcError;
 import com.xemplar.libs.crypto.server.CryptocoinException;
 import com.xemplar.libs.crypto.common.Defaults;
 import com.xemplar.libs.crypto.common.Errors;
 import com.xemplar.libs.crypto.server.http.HttpConstants;
 import com.xemplar.libs.crypto.server.http.client.SimpleHttpClient;
 import com.xemplar.libs.crypto.server.http.client.SimpleHttpClientImpl;
-import com.xemplar.libs.crypto.server.jsonrpc.JsonMapper;
-import com.xemplar.libs.crypto.server.jsonrpc.JsonPrimitiveParser;
 import com.xemplar.libs.crypto.server.jsonrpc.JsonRpcLayerException;
-import com.xemplar.libs.crypto.server.jsonrpc.domain.JsonRpcError;
 import com.xemplar.libs.crypto.server.jsonrpc.domain.JsonRpcRequest;
 import com.xemplar.libs.crypto.server.jsonrpc.domain.JsonRpcResponse;
 import org.apache.http.impl.client.CloseableHttpClient;

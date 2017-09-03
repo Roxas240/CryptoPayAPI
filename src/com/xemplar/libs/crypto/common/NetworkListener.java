@@ -20,10 +20,18 @@ public final class NetworkListener {
 
     public interface CryptoClientService extends CryptoService{}
     public interface ClientPaymentListener extends CryptoClientService {
+        public abstract void onConfirmUpdate(String key, int confirms);
         public abstract void onPinReceived(String key, String pin);
         public abstract void onPayReceived(String key, String txid);
         public abstract void onPayCanceled(String key);
         public abstract void onPayError(String key, Exception e);
+    }
+    public static class ClientPaymentAdapter implements ClientPaymentListener{
+        public void onPayReceived(String key, String txid) { }
+        public void onPayError(String key, Exception e) { }
+        public void onConfirmUpdate(String key, int confirms) { }
+        public void onPayCanceled(String key) { }
+        public void onPinReceived(String key, String pin) { }
     }
     public interface ClientRequestListener extends CryptoClientService {
         public abstract void onRequestSent(int requestID);

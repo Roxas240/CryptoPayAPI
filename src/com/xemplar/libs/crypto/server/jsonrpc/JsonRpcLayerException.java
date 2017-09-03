@@ -1,7 +1,7 @@
 package com.xemplar.libs.crypto.server.jsonrpc;
 
-import com.xemplar.libs.crypto.server.CommunicationException;
 import com.xemplar.libs.crypto.common.Errors;
+import com.xemplar.libs.crypto.server.CommunicationException;
 
 /**This exception is thrown to indicate a JSON-RPC-specific error in the underlying communication
  * infrastructure.*/

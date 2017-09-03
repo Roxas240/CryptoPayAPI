@@ -42,18 +42,13 @@ public class CryptoLink {
 
         cli = new CryptoLinkRPCImpl(http, rpcHost, rpcPort, rpcUser, rpuPass);
     }
-    public CryptoLink(String address, String webURL, String pubKey, char[] privKey, String config) throws IOException, CryptocoinException, CommunicationException{
+    public CryptoLink(String address, String webURL, String pubKey, char[] privKey, Properties props) throws IOException, CryptocoinException, CommunicationException{
         this(address, webURL, pubKey, privKey);
 
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
         CloseableHttpClient http = HttpClients.custom().setConnectionManager(cm).build();
 
-        Properties nodeConfig = new Properties();
-        InputStream is = new BufferedInputStream(new FileInputStream(config));
-        nodeConfig.load(is);
-        is.close();
-
-        cli = new CryptoLinkRPCImpl(http, nodeConfig);
+        cli = new CryptoLinkRPCImpl(http, props);
     }
     public CryptoLink(String address, String webURL, String pubKey, char[] privKey){
         this.address = address;
@@ -65,23 +60,13 @@ public class CryptoLink {
     public void setWebServerURL(String remote){
         this.rest.setURL(remote);
     }
-    public void initialize(String config) throws IOException, CommunicationException, CryptocoinException{
+    public void initialize(Properties props) throws IOException, CommunicationException, CryptocoinException{
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
         CloseableHttpClient http = HttpClients.custom().setConnectionManager(cm).build();
 
-        Properties nodeConfig = new Properties();
-        InputStream is = new BufferedInputStream(new FileInputStream(config));
-        nodeConfig.load(is);
-        is.close();
-
-        cli = new CryptoLinkRPCImpl(http, nodeConfig);
+        cli = new CryptoLinkRPCImpl(http, props);
     }
-    public void initialize(String rpcHost, int rpcPort, String rpcUser, String rpuPass) throws IOException, CommunicationException, CryptocoinException{
-        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-        CloseableHttpClient http = HttpClients.custom().setConnectionManager(cm).build();
 
-        cli = new CryptoLinkRPCImpl(http, rpcHost, rpcPort, rpcUser, rpuPass);
-    }
     public boolean initialized(){
         return cli != null && rest != null;
     }

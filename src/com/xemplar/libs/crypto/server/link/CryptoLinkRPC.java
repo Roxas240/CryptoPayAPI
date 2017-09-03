@@ -1,8 +1,8 @@
 package com.xemplar.libs.crypto.server.link;
 
 import com.xemplar.libs.crypto.server.CommunicationException;
-import com.xemplar.libs.crypto.server.CryptocoinException;
 import com.xemplar.libs.crypto.server.domain.*;
+import com.xemplar.libs.crypto.server.CryptocoinException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

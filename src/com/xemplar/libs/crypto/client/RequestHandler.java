@@ -29,15 +29,13 @@ public class RequestHandler implements Runnable {
         List<NameValuePair> params = new ArrayList<>();
         while(!pinned){
             params.add(new BasicNameValuePair("id", id + ""));
-            int req = rest.doPost("chkpin", params, new NetworkListener.ClientPaymentListener() {
+            int req = rest.doPost("chkpin", params, new NetworkListener.ClientPaymentAdapter() {
                 public void onPinReceived(String nil, String pin) {
                     if(!pin.equals("-1")) {
                         listener.onPinReceived(key, pin);
                         pinned = true;
                     }
                 }
-                public void onPayReceived(String nil, String txid) {}
-                public void onPayCanceled(String key) {}
                 public void onPayError(String nil, Exception e) {
                     pinned = true;
                     paid = true;
@@ -54,19 +52,20 @@ public class RequestHandler implements Runnable {
         }
         while(!paid){
             params.add(new BasicNameValuePair("id", id + ""));
-            int req = rest.doPost("chkpay", params, new NetworkListener.ClientPaymentListener() {
-                public void onPinReceived(String nil, String pin) { }
+            int req = rest.doPost("chkpay", params, new NetworkListener.ClientPaymentAdapter() {
                 public void onPayReceived(String nil, String txid) {
                     if(txid.equals("1")) {
                         listener.onPayReceived(key, txid);
                         paid = true;
                     }
                 }
-                public void onPayCanceled(String key) {}
                 public void onPayError(String nil, Exception e) {
                     pinned = true;
                     paid = true;
                     listener.onPayError(key, e);
+                }
+                public void onConfirmUpdate(String nil, int confirms) {
+                    listener.onConfirmUpdate(key, confirms);
                 }
             });
             if(req != 0){
