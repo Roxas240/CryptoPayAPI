@@ -8,10 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="CryptoClient" />
         <module name="CryptoInApp" />
+        <module name="CryptoPayJavaTest" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
       <module name="CryptoInApp" target="1.8" />
+      <module name="CryptoPayJavaTest" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

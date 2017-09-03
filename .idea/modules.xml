@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CryptoInApp.iml" filepath="$PROJECT_DIR$/CryptoInApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/examples/java/CryptoPayJavaTest.iml" filepath="$PROJECT_DIR$/examples/java/CryptoPayJavaTest.iml" />
+    </modules>
+  </component>
+</project>
