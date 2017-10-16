@@ -3,6 +3,7 @@ node.rpc.host = 127.0.0.1
 node.rpc.port = 32339
 node.rpc.user = <rpc_user>
 node.rpc.password = <rpc_pass>
+node.rpc.confirms = 10
 node.http.auth_scheme = Basic
 node.account.address = <crypto_address>
 

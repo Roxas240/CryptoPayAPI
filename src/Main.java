@@ -43,7 +43,7 @@ public class Main extends Application implements ServerListener{
         primaryStage.show();
         this.primaryStage = primaryStage;
         this.table = (TableView<TX>) s.lookup("#table");
-        this.model = FXCollections.emptyObservableList();
+        this.model = FXCollections.observableArrayList();
         this.table.setItems(model);
         ObservableList<TableColumn<TX, ?>> cols = this.table.getColumns();
 
@@ -61,6 +61,8 @@ public class Main extends Application implements ServerListener{
         time.setCellValueFactory(cellData -> cellData.getValue().timeFilled.asObject());
 
         primaryStage.setOnCloseRequest((WindowEvent event) -> System.exit(0));
+        onRequestReceived(-1, "Test TX", new BigDecimal(1));
+
         CryptoServer server = new CryptoServer(location, this);
         Thread t = new Thread(server);
         t.start();
@@ -147,7 +149,7 @@ public class Main extends Application implements ServerListener{
     }
 
     public static void main(String[] args){
-        args = "node_config.prop".split(" ");
+        //args = "node_config.prop".split(" ");
         if(args == null) error();
         if(args.length != 1) error();
 

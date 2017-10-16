@@ -7,9 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static com.xemplar.libs.crypto.server.net.CryptoServer.MIN_CONFIRMS;
 
@@ -52,12 +50,12 @@ public class PaymentHandler implements Runnable{
         main.link.doPost("setpin", pairs, null);
         main.listener.onRequestGenerated(request.id, pin);
 
-        List<String> hasTXNote = new ArrayList<>();
+        Set<String> hasTXNote = new HashSet<>();
         int lastBlock = startBlock - 1, currentBlock = startBlock;
         BigDecimal bal = new BigDecimal("0.0");
         boolean paid = false;
 
-        List<String> allTX = new ArrayList<>();
+        Set<String> allTX = new HashSet<>();
         while (!paid && !canceled) {
             if (currentBlock != lastBlock) {
                 List<String> received = main.link.getPayTX(pin, lastBlock, currentBlock);
@@ -90,18 +88,18 @@ public class PaymentHandler implements Runnable{
             confirms = 0;
             for (String id : allTX) {
                 Transaction b = main.link.getTransaction(id);
-                int confirm = b.getConfirmations();
+                double confirm = Math.min(b.getConfirmations(), MIN_CONFIRMS);
                 if(confirm > 0) {
-                    confirms += confirm;
+                    confirms += confirm * Double.parseDouble(b.getAmount().divide(price, BigDecimal.ROUND_UNNECESSARY).toPlainString());
                 }
             }
-            confirms /= (double)allTX.size();
+            System.out.println("    CONF:" + confirms);
             if(prevConfirmes != confirms){
                 List<NameValuePair> dat = new ArrayList<>();
                 dat.add(new BasicNameValuePair("id", id + ""));
-                dat.add(new BasicNameValuePair("confirms", (int)confirms + ""));
+                dat.add(new BasicNameValuePair("confirms", confirms + ""));
                 main.link.doPost("confirms", dat, null);
-                main.listener.onRequestUpdate(request.id, "Confirm: " + (int)confirms);
+                main.listener.onRequestUpdate(request.id, "Confirm: " + confirms);
                 dat.clear();
             }
             prevConfirmes = confirms;

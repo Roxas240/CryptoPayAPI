@@ -60,7 +60,7 @@ public class CryptoTest extends Application implements MoneyListener, NetworkLis
             System.exit(0);
         });
 
-        cli = new CryptoClient(CRYPTO_ADDRESS, "http://localhost/index.php", "api", "password".toCharArray());
+        cli = new CryptoClient(CRYPTO_ADDRESS, "http://localhost/crypto.php", "pay_manager", "s4BgNvfcmoj0q5bz".toCharArray());
 
         Button opt1 = (Button) s.lookup("#buy_opt1");
         Button opt2 = (Button) s.lookup("#buy_opt2");

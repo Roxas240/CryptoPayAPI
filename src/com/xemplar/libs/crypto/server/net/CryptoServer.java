@@ -49,6 +49,12 @@ public class CryptoServer implements Runnable{
             String url = NodeProps.DB_URL.getValue(nodeConfig);
             String user = NodeProps.DB_USER.getValue(nodeConfig);
             char[] pass = NodeProps.DB_PASS.getValue(nodeConfig).toCharArray();
+            try {
+                MIN_CONFIRMS = Integer.parseInt(NodeProps.RPC_CONFIRM.getValue(nodeConfig));
+            } catch (Exception e){
+                System.err.println("Invalid value set for " + NodeProps.RPC_CONFIRM.getKey());
+                System.exit(-1);
+            }
 
             this.link = new CryptoLink(address, url, user, pass);
             link.initialize(nodeConfig);

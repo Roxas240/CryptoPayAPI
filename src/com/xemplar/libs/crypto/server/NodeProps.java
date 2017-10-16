@@ -10,6 +10,7 @@ public enum NodeProps {
     RPC_HOST("node.rpc.host", "127.0.0.1"),
     RPC_PORT("node.rpc.port", "8332"),
     RPC_USER("node.rpc.user", "user"),
+    RPC_CONFIRM("node.rpc.confirms", "3"),
     RPC_PASSWORD("node.rpc.password", "password"),
     HTTP_AUTH_SCHEME("node.http.auth_scheme", "Basic"),
     ALERT_PORT("node.notification.alert.port", "5158"),

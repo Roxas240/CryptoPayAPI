@@ -87,11 +87,12 @@ if(!$fail){
 			$conn = loginMysql($user, $pass, $_SESSION['dbname']);
 			$query = "CREATE TABLE `$tablename` (
 						`id` int(11) NOT NULL,
-						`txid` tinytext NOT NULL,
+						`txid` text NOT NULL,
 						`amount` tinytext NOT NULL,
 						`code` varchar(6) NOT NULL,
 						`notes` tinytext NOT NULL,
 						`filled` int(11) NOT NULL DEFAULT 0
+						`confirms` float NOT NULL DEFAULT 0
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 			$res = mysqli_query($conn, $query);
