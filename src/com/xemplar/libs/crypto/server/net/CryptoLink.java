@@ -34,26 +34,26 @@ public class CryptoLink {
     private CryptoLinkRPC cli;
     private CryptoRest rest;
 
-    public CryptoLink(String address, String webURL, String pubKey, char[] privKey, String rpcHost, int rpcPort, String rpcUser, String rpuPass) throws CryptocoinException, CommunicationException {
-        this(address, webURL, pubKey, privKey);
+    public CryptoLink(String address, String webURL, String pubKey, char[] privKey, char[] enckey, String rpcHost, int rpcPort, String rpcUser, String rpuPass) throws CryptocoinException, CommunicationException {
+        this(address, webURL, pubKey, privKey, enckey);
 
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
         CloseableHttpClient http = HttpClients.custom().setConnectionManager(cm).build();
 
         cli = new CryptoLinkRPCImpl(http, rpcHost, rpcPort, rpcUser, rpuPass);
     }
-    public CryptoLink(String address, String webURL, String pubKey, char[] privKey, Properties props) throws IOException, CryptocoinException, CommunicationException{
-        this(address, webURL, pubKey, privKey);
+    public CryptoLink(String address, String webURL, String pubKey, char[] privKey, char[] enckey, Properties props) throws IOException, CryptocoinException, CommunicationException{
+        this(address, webURL, pubKey, privKey, enckey);
 
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
         CloseableHttpClient http = HttpClients.custom().setConnectionManager(cm).build();
 
         cli = new CryptoLinkRPCImpl(http, props);
     }
-    public CryptoLink(String address, String webURL, String pubKey, char[] privKey){
+    public CryptoLink(String address, String webURL, String pubKey, char[] privKey, char[] enckey){
         this.address = address;
 
-        rest = new CryptoRest(pubKey, privKey, webURL, this);
+        rest = new CryptoRest(pubKey, privKey, enckey, webURL, this);
         mapper = new JsonMapper();
     }
 

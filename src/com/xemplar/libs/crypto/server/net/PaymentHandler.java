@@ -63,6 +63,7 @@ public class PaymentHandler implements Runnable{
                     hasTXNote.addAll(received);
                     allTX.addAll(received);
                 }
+                System.out.println(bal.toPlainString() + ":" + price.toPlainString());
                 if (bal.compareTo(price) >= 0) {
                     paid = true;
                 }
@@ -106,14 +107,22 @@ public class PaymentHandler implements Runnable{
 
             sleep(1000);
         }
-        allTX.clear();
 
         if (paid) {
+            String[] sendTX = new String[allTX.size()];
+            sendTX = allTX.toArray(sendTX);
+
+            String send = sendTX[0];
+            for(int i = 1; i < sendTX.length; i++){
+                send += ":" + sendTX[i];
+            }
             main.listener.onRequestUpdate(request.id, "Filled");
-            payListener.paymentReceived(this, "");
+            payListener.paymentReceived(this, send);
             main.codes.remove(pin);
             hasTXNote.clear();
         }
+
+        allTX.clear();
     }
 
 

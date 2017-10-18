@@ -104,7 +104,37 @@ if(!$fail){
 				$_SESSION['table'] = $tablename;
 			}
 		}
-	}
+	} elseif($stag == 4){
+     	$tablename = trim(filter_input(INPUT_POST, "table", FILTER_SANITIZE_STRING)) ?? NULL;
+     	if(strlen($tablename) < 2){
+     		$stag = 3;
+     		$error .= "Table name is to short. <br>";
+     	}
+
+     	if($stag == 4){
+     		$conn = loginMysql($user, $pass, $_SESSION['dbname']);
+     		$query = "CREATE TABLE `$tablename` (
+                        `id` int(11) NOT NULL,
+                        `name` tinytext COLLATE utf8_bin NOT NULL,
+                        `value` tinytext COLLATE utf8_bin NOT NULL
+                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+                      INSERT INTO `count_vars` (`id`, `name`, `value`) VALUES
+                      (1, 'avgtime', '0'),
+                      (2, 'lasttime', '0'),
+                      (3, 'height', '0'),
+                      (4, 'goal', '0');";
+
+     		$res = mysqli_query($conn, $query);
+     		if(!$res){
+     			$error .= $conn->error;
+     			$fail = true;
+     		} else {
+     			$success .= "Table '$tablename' created successfully! <br>";
+     			$_SESSION['table'] = $tablename;
+     		}
+     	}
+    }
 }
 
 function loginMysql($userName = \NULL, $passWord = \NULL, $database = \NULL) {
@@ -202,19 +232,36 @@ function str_equal($str1, $str2){
   <form action="setup.php" method="post">
   <table>
     <tr>
-      <td colspan="2"><h3>Table Setup</h3></td>
+      <td colspan="2"><h3>Payment Table Setup</h3></td>
     </tr>
     <tr>
-      <td>Table Name: </td>
+      <td>Payment Table Name: </td>
       <td><input type="text" id="table" name="table" value="" /></td>
     </tr>
-	</tr>
+	<tr>
 	  <input type="hidden" id="stage" name="stage" value="3" />
       <td colspan="2"><button type="submit">Submit</button></td>
     </tr>
   </table>
   </form>';
-  } elseif($stag == 3) {
+  }  elseif($stag == 3) {
+    echo '
+  <form action="setup.php" method="post">
+    <table>
+      <tr>
+        <td colspan="2"><h3>Variable Table Setup</h3></td>
+      </tr>
+      <tr>
+        <td>Variable Table Name: </td>
+        <td><input type="text" id="table" name="table" value="" /></td>
+      </tr>
+      <tr>
+    	<input type="hidden" id="stage" name="stage" value="4" />
+        <td colspan="2"><button type="submit">Submit</button></td>
+      </tr>
+    </table>
+  </form>';
+  } elseif($stag == 4) {
 	echo '
   <h3>Setup Complete!</h3>
   <p>
@@ -229,7 +276,8 @@ function str_equal($str1, $str2){
   <p>Below are your credentials for filling out index.php:</p>
   <ul>
     <li>Port: '.$port.'</li>
-	<li>Table: '.$_SESSION['table'].'</li>
+	<li>Payment Table: '.$_SESSION['table'].'</li>
+	<li>Variable Table: '.$_SESSION['table'].'</li>
 	<li>Hostname: '.$hostname.'</li>
 	<li>Database: '.$_SESSION['dbname'].'</li>
   </ul>

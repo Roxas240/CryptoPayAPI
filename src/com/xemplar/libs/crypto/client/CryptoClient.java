@@ -35,12 +35,13 @@ public final class CryptoClient {
      * @param webAddress The web address of your server's page that handles payment.
      * @param user The username of your mysql or equivalent server.
      * @param pass The password of your mysql or equivalent server.
+     * @param enckey The encryption password set in your crypto.php or crypto.php
      */
-    public CryptoClient(String cryptoAddress, String webAddress, String user, char[] pass){
+    public CryptoClient(String cryptoAddress, String webAddress, String user, char[] pass, char[] enckey){
         this.cryptoAddress = cryptoAddress;
         this.port = 80;
 
-        this.rest = new CryptoRest(user, pass, webAddress);
+        this.rest = new CryptoRest(user, pass,enckey, webAddress);
     }
 
     /**

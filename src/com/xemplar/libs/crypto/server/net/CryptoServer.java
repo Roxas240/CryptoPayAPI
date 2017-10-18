@@ -22,15 +22,17 @@ public class CryptoServer implements Runnable{
     public ServerListener listener;
     public boolean running = false;
     CryptoLink link;
+    LiveVarHandler handler;
 
-    public CryptoServer(String cryptoAddress, String webAddress, String user, char[] pass, String config){
-        this.link = new CryptoLink(cryptoAddress, webAddress, user, pass);
+    public CryptoServer(String cryptoAddress, String webAddress, String user, char[] pass, char[] enckey, String config){
+        this.link = new CryptoLink(cryptoAddress, webAddress, user, pass, enckey);
         try {
             Properties nodeConfig = new Properties();
             InputStream is = new BufferedInputStream(new FileInputStream("./" + config));
             nodeConfig.load(is);
             is.close();
             link.initialize(nodeConfig);
+            handler = new LiveVarHandler(link, nodeConfig);
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -49,6 +51,8 @@ public class CryptoServer implements Runnable{
             String url = NodeProps.DB_URL.getValue(nodeConfig);
             String user = NodeProps.DB_USER.getValue(nodeConfig);
             char[] pass = NodeProps.DB_PASS.getValue(nodeConfig).toCharArray();
+            char[] enckey = NodeProps.DB_ENCKEY.getValue(nodeConfig).toCharArray();
+
             try {
                 MIN_CONFIRMS = Integer.parseInt(NodeProps.RPC_CONFIRM.getValue(nodeConfig));
             } catch (Exception e){
@@ -56,8 +60,9 @@ public class CryptoServer implements Runnable{
                 System.exit(-1);
             }
 
-            this.link = new CryptoLink(address, url, user, pass);
+            this.link = new CryptoLink(address, url, user, pass, enckey);
             link.initialize(nodeConfig);
+            handler = new LiveVarHandler(link, nodeConfig);
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -65,6 +70,9 @@ public class CryptoServer implements Runnable{
     }
 
     public void run(){
+        Thread liveVar = new Thread(handler);
+        liveVar.start();
+
         while(running){
             searchForRequests();
             setupPaymentHandlers();

@@ -2,7 +2,7 @@
   <artifact type="jar" name="CryptoPayAPI">
     <output-path>$PROJECT_DIR$/out/artifacts/CryptoPayAPI</output-path>
     <root id="archive" name="CryptoInApp.jar">
-      <element id="module-output" name="CryptoInApp" />
+      <element id="module-output" name="CryptoPayAPI" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpclient/4.3.6/httpclient-4.3.6.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.5.0/jackson-databind-2.5.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.10/slf4j-api-1.7.10.jar" path-in-jar="/" />

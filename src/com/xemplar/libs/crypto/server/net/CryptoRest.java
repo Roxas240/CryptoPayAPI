@@ -22,13 +22,13 @@ import java.util.List;
 public class CryptoRest extends HttpRest {
     private CryptoLink link;
 
-    public CryptoRest(String pubKey, char[] privKey, String url, CryptoLink link){
-        this(pubKey, privKey, url);
+    public CryptoRest(String pubKey, char[] privKey, char[] enckey, String url, CryptoLink link){
+        this(pubKey, privKey, enckey, url);
         this.link = link;
     }
 
-    public CryptoRest(String pubKey, char[] privKey, String url){
-        super(pubKey, privKey, url);
+    public CryptoRest(String pubKey, char[] privKey, char[] enckey, String url){
+        super(pubKey, privKey, enckey, url);
     }
 
     public void setLink(CryptoLink link){

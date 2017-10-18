@@ -149,7 +149,7 @@ public class Main extends Application implements ServerListener{
     }
 
     public static void main(String[] args){
-        //args = "node_config.prop".split(" ");
+        args = "node_config.prop".split(" ");
         if(args == null) error();
         if(args.length != 1) error();
 

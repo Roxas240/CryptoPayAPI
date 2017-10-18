@@ -4,9 +4,15 @@ node.rpc.port = 32339
 node.rpc.user = <rpc_user>
 node.rpc.password = <rpc_pass>
 node.rpc.confirms = 10
+
+node.live.height = n
+node.live.lasttime = n
+node.live.avgtime = 0
+
 node.http.auth_scheme = Basic
 node.account.address = <crypto_address>
 
 db.web.user = <db_user>
 db.web.pass = <db_pass>
 db.web.url = <db_url>
+db.web.enckey = <com_enckey>

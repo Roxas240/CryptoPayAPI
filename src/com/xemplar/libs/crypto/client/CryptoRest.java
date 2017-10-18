@@ -20,8 +20,8 @@ import java.util.List;
  * Created by Rohan on 8/22/2017.
  */
 public class CryptoRest extends HttpRest {
-    public CryptoRest(String pubKey, char[] privKey, String url){
-        super(pubKey, privKey, url);
+    public CryptoRest(String pubKey, char[] privKey, char[] enckey, String url){
+        super(pubKey, privKey, enckey, url);
     }
 
     protected int handlePost(String method, List<NameValuePair> params, NetworkListener.CryptoService listener) {
