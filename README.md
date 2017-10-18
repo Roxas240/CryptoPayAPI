@@ -1,4 +1,6 @@
 # CryptoInApp
+
+[![Join the chat at https://gitter.im/CryptoPayAPI/Lobby](https://badges.gitter.im/CryptoPayAPI/Lobby.svg)](https://gitter.im/CryptoPayAPI/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 This API allows for gamemakers and programmers alike to accept crypto-currencies for in app purchases. Any currency that supports a narration in a transaction is supported. As it stands, the server works on any host but is advised to be run on the same platform as the rpc wallet.
 
 ## Setup
