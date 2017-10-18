@@ -92,7 +92,7 @@ public class CryptoServer implements Runnable{
 
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("id", handler.getID() + ""));
-                    params.add(new BasicNameValuePair("txID", txID));
+                    params.add(new BasicNameValuePair("txid", txID));
 
                     CryptoServer.this.link.doPost("setpaid", params, null);
                     CryptoServer.this.listener.onRequestFilled(handler.getID());
